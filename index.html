@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Township Accommodation Form – JSW Cement, Nandyal Works</title>
+<title>Township Accommodation Survey – JSW Cement, Nandyal Works</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -97,7 +97,7 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
 <header>
   <div class="wrap">
     <p class="org">JSW Cement Limited, Nandyal Works</p>
-    <h1>Township accommodation form</h1>
+    <h1>Township accommodation survey</h1>
     <p id="subline">Takes about 3 minutes. Last date: <span id="lastdate"></span></p>
     <ol class="steps" id="bar" aria-hidden="true"></ol>
     <div class="stepname" id="stepname"></div>
@@ -151,28 +151,12 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
         <label class="choice"><input type="radio" name="marital" value="Single"><span>Single – widowed, divorced or separated</span></label>
       </div><div class="err">Select one.</div></div>
 
-    <div class="q" data-if="idDone"><span class="t">Do you want township accommodation?</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="want" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="want" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
-    <div class="q" data-if="wantNo"><span class="t">Main reason</span>
-      <div class="choices col">
-        <label class="choice"><input type="radio" name="no_reason" value="Own house nearby" required><span>Own house nearby</span></label>
-        <label class="choice"><input type="radio" name="no_reason" value="Family staying elsewhere, will manage"><span>Family staying elsewhere, I will manage</span></label>
-        <label class="choice"><input type="radio" name="no_reason" value="Prefer outside accommodation"><span>Prefer to stay outside</span></label>
-        <label class="choice"><input type="radio" name="no_reason" value="Other"><span>Other</span></label>
-      </div><div class="err">Select one.</div></div>
-
-    <div class="q" data-if="noReasonOther"><label class="t" for="no_reason_other">Please specify</label>
-      <input type="text" id="no_reason_other" name="no_reason_other" required><div class="err">Please specify.</div></div>
   </section>
 
   <!-- STEP 2 -->
   <section class="step" data-step="need" data-if="wantYes" data-title="Your need">
     <h2>Who will stay with you</h2>
-    <p class="lead">This decides whether you get a family flat or a twin-sharing room.</p>
+    <p class="lead">This helps us plan family flats and twin-sharing rooms.</p>
 
     <div class="q" data-if="married"><span class="t">Will your family (spouse and children) stay with you in the township?</span>
       <div class="choices col">
@@ -200,29 +184,10 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
 
     <div class="result" id="acc_result" data-if="accKnown"></div>
 
-    <div class="q" data-if="married"><span class="t">Is your spouse also a JSW employee at Nandyal?</span>
-      <p class="hint">One flat is allotted per couple.</p>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="spouse_jsw" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="spouse_jsw" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
-    <div class="q" data-if="spouseJsw"><label class="t" for="spouse_emp_id">Spouse's Employee ID</label>
-      <input type="text" id="spouse_emp_id" name="spouse_emp_id" inputmode="numeric" maxlength="8" required data-check="empid">
-      <div class="err">Enter a 7-digit Employee ID.</div></div>
-
     <div class="q"><span class="t">Do you or your family own a house within 25 km of the plant?</span>
       <div class="choices">
         <label class="choice"><input type="radio" name="house25" value="Yes" required><span>Yes</span></label>
         <label class="choice"><input type="radio" name="house25" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
-    <div class="q"><span class="t">Where are you staying now?</span>
-      <div class="choices col">
-        <label class="choice"><input type="radio" name="current_stay" value="Nandyal town" required><span>Nandyal town</span></label>
-        <label class="choice"><input type="radio" name="current_stay" value="Other nearby town"><span>Other nearby town</span></label>
-        <label class="choice"><input type="radio" name="current_stay" value="Company guest house"><span>Company guest house</span></label>
-        <label class="choice"><input type="radio" name="current_stay" value="Other"><span>Other</span></label>
       </div><div class="err">Select one.</div></div>
 
   </section>
@@ -301,14 +266,6 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
         <label class="choice"><input type="radio" name="food" value="Eggetarian"><span>Eggetarian</span></label>
       </div><div class="err">Select one.</div></div>
 
-    <div class="q"><span class="t">Pets</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="pets" value="None" required><span>None</span></label>
-        <label class="choice"><input type="radio" name="pets" value="Dog"><span>Dog</span></label>
-        <label class="choice"><input type="radio" name="pets" value="Cat"><span>Cat</span></label>
-        <label class="choice"><input type="radio" name="pets" value="Other"><span>Other</span></label>
-      </div><div class="err">Select one.</div></div>
-
   </section>
 
   <!-- STEP 6 -->
@@ -318,15 +275,15 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
     <dl class="sum" id="summary"></dl>
     <div class="q" style="margin-top:14px">
       <label class="choice" style="display:block"><input type="checkbox" name="declare" value="Agreed" required>
-        <span style="border-radius:8px;display:block">I confirm these answers are true. False information will cancel the allotment, and I will follow the Township Allotment Rules.</span></label>
+        <span style="border-radius:8px;display:block">I confirm that the information given is correct to the best of my knowledge. I understand this survey is only for planning, and filling it does not guarantee a township flat.</span></label>
       <div class="err">Tick to confirm before submitting.</div></div>
-    <p class="privacy">Your answers are seen only by HR and the Township Committee, and are used only for township allotment. You can submit again before the last date; your latest answers will replace the earlier ones.</p>
+    <p class="privacy">Your answers are seen only by HR and the Township Committee, and are used only for township planning. You can submit again before the last date; your latest answers will replace the earlier ones.</p>
   </section>
 
   <!-- DONE -->
   <section class="step" data-step="done" data-title="Submitted">
     <div class="done-box">
-      <h2 id="done_title">Form submitted</h2>
+      <h2 id="done_title">Survey submitted</h2>
       <p id="done_msg"></p>
       <p><button type="button" class="link" id="dl">Download a copy of my answers</button></p>
       <p class="privacy" id="done_contact"></p>
@@ -356,18 +313,16 @@ function val(n){const els=form.elements[n]; if(!els) return '';
   if(els instanceof RadioNodeList){ const c=[...els].filter(e=>e.checked); if(!c.length) return ''; return els[0].type==='checkbox'?c.map(e=>e.value):c[0].value; }
   if(els.type==='checkbox') return els.checked?els.value:''; return els.value.trim();}
 const num=n=>parseInt(val(n)||'0',10);
-const SCHOOL=['Play school – UKG','Class 1–5','Class 6–10','Class 11–12'];
+const NOTSCHOOL=['','Not yet in school','Working']; const inSchool=c=>!NOTSCHOOL.includes(c);
 
 /* ---------- conditions ---------- */
 let EMP=null, MANUAL=false;
 const C={
   found:()=>!!EMP, manual:()=>MANUAL, idDone:()=>!!EMP||MANUAL,
-  wantYes:()=>C.idDone()&&val('want')==='Yes', wantNo:()=>C.idDone()&&val('want')==='No',
-  noReasonOther:()=>C.wantNo()&&val('no_reason')==='Other',
+  wantYes:()=>C.idDone(), wantNo:()=>false,
   married:()=>C.wantYes()&&val('marital')==='Married',
   single:()=>C.wantYes()&&val('marital')==='Single',
   notMarried:()=>C.wantYes()&&['Unmarried','Single'].includes(val('marital')),
-  spouseJsw:()=>C.married()&&val('spouse_jsw')==='Yes',
   accType:()=>{ if(!C.wantYes()) return '';
     const m=val('marital');
     if(m==='Married'){ const f=val('fam_move'); return f==='Yes'?'Family flat':f==='No'?'Twin sharing':''; }
@@ -379,7 +334,6 @@ const C={
   spouseStay:()=>C.family()&&val('marital')==='Married'&&val('spouse_stay')==='Yes',
   askChildren:()=>C.family()&&(val('marital')==='Married'||val('s_children')==='Yes'),
   hasChildren:()=>C.askChildren()&&num('child_count')>0,
-  hasSchoolChild:()=>C.hasChildren()&&kids().some(k=>SCHOOL.includes(k.stage)),
   hasSmallChild:()=>C.hasChildren()&&kids().some(k=>k.age!==''&&+k.age<3),
   askParents:()=>C.family()&&(val('marital')==='Married'||val('parents_stay')==='Yes'),
   hasParents:()=>C.askParents()&&num('parent_count')>0,
@@ -391,32 +345,31 @@ const C={
 
 /* ---------- children blocks ---------- */
 function kids(){const n=C.askChildren()?num('child_count'):0,a=[];
-  for(let i=1;i<=n;i++) a.push({age:val('child'+i+'_age'),gender:val('child'+i+'_gender'),stage:val('child'+i+'_stage'),school:val('child'+i+'_school'),board:val('child'+i+'_board')});
+  for(let i=1;i<=n;i++) a.push({age:val('child'+i+'_age'),gender:val('child'+i+'_gender'),cls:val('child'+i+'_class'),school:val('child'+i+'_school')});
   return a;}
 function childBlock(i){
   const r=(name,opts)=>opts.map(o=>`<label class="choice"><input type="radio" name="${name}" value="${o}" required><span>${o}</span></label>`).join('');
+  const cls=['Not yet in school','Play school / Nursery','LKG','UKG'].concat([...Array(12)].map((_,k)=>'Class '+(k+1))).concat(['Diploma / ITI','Degree / College','Working']);
   const d=document.createElement('div'); d.className='child'; d.dataset.child=i;
   d.innerHTML=`<h3>Child ${i}</h3>
-   <div class="f"><label class="t" for="child${i}_age">Age in years</label><input type="number" id="child${i}_age" name="child${i}_age" min="0" max="30" inputmode="numeric" required></div>
+   <div class="f"><label class="t" for="child${i}_age">Age in years</label><input type="number" id="child${i}_age" name="child${i}_age" min="0" max="35" inputmode="numeric" required></div>
    <div class="f"><span class="t">Gender</span><div class="choices">${r('child'+i+'_gender',['Boy','Girl'])}</div></div>
-   <div class="f"><label class="t" for="child${i}_stage">Current stage</label><select id="child${i}_stage" name="child${i}_stage" required>
-     <option value="">Select</option><option>Below 3 years (not in school)</option><option>Play school – UKG</option><option>Class 1–5</option><option>Class 6–10</option><option>Class 11–12</option><option>College or working</option></select></div>
-   <div class="f" data-cs="${i}"><label class="t" for="child${i}_school">School near the township</label><select id="child${i}_school" name="child${i}_school" required>
-     <option value="">Select</option><option>Already studying in Nandyal</option><option>Need admission for 2026-27</option><option>Need admission from 2027-28</option><option>Not needed</option></select></div>
-   <div class="f" data-cs="${i}"><span class="t">Preferred board</span><div class="choices">${r('child'+i+'_board',['State','CBSE','ICSE','No preference'])}</div></div>
-`;
+   <div class="f"><label class="t" for="child${i}_class">Class now studying</label><select id="child${i}_class" name="child${i}_class" required>
+     <option value="">Select</option>${cls.map(c=>`<option>${c}</option>`).join('')}</select></div>
+   <div class="f" data-cs="${i}"><label class="t" for="child${i}_school">School or college name and place</label>
+     <input type="text" id="child${i}_school" name="child${i}_school" required placeholder="e.g. Kendriya Vidyalaya, Nandyal"></div>`;
   return d;}
 function syncChildren(){const box=document.getElementById('children');const n=C.askChildren()?num('child_count'):0;
   while(box.children.length<n) box.appendChild(childBlock(box.children.length+1));
-  [...box.children].forEach((c,k)=>{c.hidden=k>=n; const i=k+1; const st=val('child'+i+'_stage');
-    c.querySelectorAll('[data-cs]').forEach(x=>x.hidden=!SCHOOL.includes(st));});}
+  [...box.children].forEach((c,k)=>{c.hidden=k>=n; const i=k+1; const st=val('child'+i+'_class');
+    c.querySelectorAll('[data-cs]').forEach(x=>x.hidden=!inSchool(st));});}
 
 /* ---------- apply visibility ---------- */
 function apply(){
   syncChildren();
   $$('[data-if]').forEach(el=>{ if(el.matches('section.step')) return; el.hidden=!C[el.dataset.if](); });
   const a=C.accType(), res=document.getElementById('acc_result');
-  res.textContent=a?`Based on your answers, you will be considered for: ${a}.`:'';
+  res.textContent=a?`Accommodation type based on your answers: ${a}.`:'';
   const m=val('marital'); document.getElementById('parent_label').textContent=m==='Married'?'Parents or in-laws who will stay with you':'Parents who will stay with you';
   const pc=$('#parent_count'); if(C.askParents()&&m!=='Married'&&val('parents_stay')==='Yes'){ [...pc.options].forEach(o=>{if(o.value==='0')o.hidden=true}); if(pc.value==='0')pc.value=''; } else [...pc.options].forEach(o=>o.hidden=false);
   const cc=$('#child_count'); if(val('marital')==='Single'){ [...cc.options].forEach(o=>{if(o.value==='0')o.hidden=true}); if(cc.value==='0')cc.value=''; } else [...cc.options].forEach(o=>o.hidden=false);
@@ -462,35 +415,34 @@ function collect(){const d={submitted_at:new Date().toISOString()};
   add('emp_name',val('emp_name')); add('gender',val('gender')); add('dob',fromISO(val('dob'))); add('department',val('department'));
   add('designation',val('designation')); add('grade',val('grade').toUpperCase()); add('doj',fromISO(val('doj')));
   if(EMP){ add('marital_hr',EMP.marital); const ch=changes(); add('changed_fields',ch.join(', ')); }
-  ['mobile','marital','want'].forEach(k=>add(k,val(k)));
-  if(C.wantNo()){add('no_reason',val('no_reason')); if(C.noReasonOther()) add('no_reason_other',val('no_reason_other'));}
+  ['mobile','marital'].forEach(k=>add(k,val(k)));
   if(C.wantYes()){
     add('accommodation_type',C.accType());
-    ['fam_move','parents_stay','s_children','nm_others','spouse_jsw','spouse_emp_id'].forEach(k=>{ const el=form.elements[k]; const q=(el instanceof RadioNodeList?el[0]:el).closest('.q'); if(q&&!q.hidden) add(k,val(k)); });
-    ['house25','current_stay'].forEach(k=>add(k,val(k)));
+    ['fam_move','parents_stay','s_children','nm_others'].forEach(k=>{ const el=form.elements[k]; const q=(el instanceof RadioNodeList?el[0]:el).closest('.q'); if(q&&!q.hidden) add(k,val(k)); });
+    add('house25',val('house25'));
     if(C.family()){
       if(val('marital')==='Married'){add('spouse_stay',val('spouse_stay')); if(C.spouseStay()) add('spouse_work',val('spouse_work'));}
       add('child_count',C.askChildren()?num('child_count'):0);
-      kids().forEach((k,i)=>{const p='child'+(i+1)+'_'; add(p+'age',k.age); add(p+'gender',k.gender); add(p+'stage',k.stage);
-        if(SCHOOL.includes(k.stage)){add(p+'school',k.school); add(p+'board',k.board);}});
+      kids().forEach((k,i)=>{const p='child'+(i+1)+'_'; add(p+'age',k.age); add(p+'gender',k.gender); add(p+'class',k.cls);
+        if(inSchool(k.cls)) add(p+'school',k.school);});
       add('parent_count',C.askParents()?num('parent_count'):0); if(C.hasParents()) add('parent65',val('parent65'));
       add('other_count',C.askOthers()?num('other_count'):0); if(C.hasOthers()) add('other_relation',val('other_relation'));
       add('total_persons',document.getElementById('family_total').textContent.replace(/\D/g,''));
     }
-    ['two_wheelers','four_wheelers','pets'].forEach(k=>add(k,val(k)));
+    ['two_wheelers','four_wheelers'].forEach(k=>add(k,val(k)));
     if(C.twin()){add('roommate',val('roommate')); add('food',val('food'));}
   }
   add('declaration',val('declare')); return d;}
 
 const LABELS={source:'Details from',designation:'Designation',grade:'Grade',gender:'Gender',dob:'Date of birth',doj:'Date of joining',marital_hr:'Marital status (HR record)',changed_fields:'Changed from HR record',emp_id:'Employee ID',emp_name:'Name',department:'Department',mobile:'Mobile',marital:'Marital status',want:'Wants accommodation',
- no_reason:'Reason',no_reason_other:'Reason (details)',accommodation_type:'Considered for',fam_move:'Family will stay',parents_stay:'Parents will stay',
+ no_reason:'Reason',no_reason_other:'Reason (details)',accommodation_type:'Accommodation type',fam_move:'Family will stay',parents_stay:'Parents will stay',
  s_children:'Children will stay',nm_others:'Other dependents will stay',spouse_jsw:'Spouse is JSW employee',spouse_emp_id:"Spouse's Employee ID",house25:'Own house within 25 km',
  current_stay:'Staying now',movein:'Can move in from',spouse_stay:'Spouse will stay',spouse_work:'Spouse working',child_count:'Children staying',
  school_bus:'School bus needed',creche:'Crèche needed',child_special:'Child with special needs',parent_count:'Parents / in-laws staying',parent65:'Parent aged 65+',
  other_count:'Other dependents',other_relation:'Relation',total_persons:'Total persons in flat',stairs:'Stair difficulty',stairs_who:'Who',mobility_aid:'Wheelchair / walker',
  temp_low:'Temporary low floor',two_wheelers:'Two-wheelers',four_wheelers:'Four-wheelers',mess:'Mess needed',pets:'Pets',emg_name:'Emergency contact',emg_mobile:'Emergency mobile',
  facilities:'Facilities',roommate:'Preferred roommate',food:'Food preference',live_in_help:'Live-in help'};
-function label(k){const m=k.match(/^child(\d)_(\w+)$/); if(m) return `Child ${m[1]} – ${({age:'age',gender:'gender',stage:'stage',school:'school near township',board:'board'})[m[2]]}`; return LABELS[k]||k;}
+function label(k){const m=k.match(/^child(\d)_(\w+)$/); if(m) return `Child ${m[1]} – ${({age:'age',gender:'gender',class:'class',school:'school / college'})[m[2]]}`; return LABELS[k]||k;}
 function buildSummary(){const d=collect(), box=document.getElementById('summary'); box.innerHTML='';
   Object.entries(d).forEach(([k,v])=>{ if(['submitted_at','declaration'].includes(k)||v===''||v===undefined) return;
     const row=document.createElement('div'); const dt=document.createElement('dt'); const dd=document.createElement('dd');
@@ -506,8 +458,8 @@ async function submit(){const btn=document.getElementById('next'); btn.disabled=
          catch(e){ ok=false; } }
   btn.disabled=false; btn.textContent='Submit';
   const t=document.getElementById('done_title'), m=document.getElementById('done_msg');
-  if(ok){ t.textContent=CONFIG.SUBMIT_URL?'Form submitted':'Checked (test mode)'; t.style.color='';
-    m.textContent=msg||`Thank you, ${d.emp_name}. Your answers are saved against Employee ID ${d.emp_id}. HR will share the provisional list on the notice board.`;
+  if(ok){ t.textContent=CONFIG.SUBMIT_URL?'Survey submitted':'Checked (test mode)'; t.style.color='';
+    m.textContent=msg||`Thank you, ${d.emp_name}. Your survey response is saved against Employee ID ${d.emp_id}.`;
     try{localStorage.removeItem(DRAFT)}catch(e){} }
   else { t.textContent='Not submitted'; t.style.color='var(--err)';
     m.textContent='Your answers could not be sent. Check your internet and try again, or download a copy of your answers and send it to HR.'; }
