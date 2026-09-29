@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Township Accommodation Form – JSW Cement, Nandyal Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+/* ================= SETTINGS – edit these before rollout ================= */
+const CONFIG = {
+  SUBMIT_URL: "https://script.google.com/macros/s/AKfycbyenHnAnZ2fRxfkLoLkRO4GveiF1ZjCeGu3RRpvFM9JKg9tnnb1HlIqrTRFLUSNvgA/exec",                 // paste the Google Apps Script web app URL here (see README). Empty = test mode
+  LAST_DATE: "01 October 2026",
+  HR_CONTACT: "HR Department, Nandyal Works",
+  DEPARTMENTS: ["Mechanical","Production & Process","Mining","Nandyal Plant","Instrumentation","Electrical",
+    "Quality Control","Human Resource","Finance & Accounts","Electrical & Instrumentation","Packing Plant",
+    "Waste Heat Recovery System","Civil & Structural","Technical Cell","Corporate Social Responsibility",
+    "Safety","Security","Commercial","Environment","Stores","Information Technology","Operations","Projects","OHC / Medical","Other"]
+};
+/* ======================================================================= */
+</script>
+<style>
+:root{
+  --navy:#1F3864; --navy-2:#2B4A80; --ink:#1B2230; --slate:#556070; --line:#D3D9E2;
+  --bg:#EEF1F5; --card:#FFFFFF; --pick:#E6ECF6; --ok:#1E7A4F; --err:#B3261E; --warn:#8A5A00;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-padding-bottom:110px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Noto Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header{background:var(--navy);color:#fff}
+.wrap{max-width:720px;margin:0 auto;padding:0 18px}
+header .wrap{padding-top:22px;padding-bottom:20px}
+header .org{font-size:14px;opacity:.85;margin:0}
+header h1{font-size:24px;line-height:1.25;margin:4px 0 6px;font-weight:700}
+header p{margin:0;font-size:14px;opacity:.9}
+.steps{display:flex;gap:6px;margin:18px 0 0;padding:0;list-style:none}
+.steps li{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.25)}
+.steps li.done{background:#fff}
+.steps li.now{background:#9FB7E0}
+.stepname{font-size:13px;margin-top:8px;opacity:.9}
+main.wrap{padding:20px 18px 130px}
+.banner{background:#FFF4D6;border:1px solid #E8CF8A;color:var(--warn);padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:16px}
+section.step{display:none}
+section.step.active{display:block}
+h2{font-size:20px;margin:4px 0 4px;color:var(--navy)}
+.lead{color:var(--slate);margin:0 0 16px;font-size:15px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:12px}
+.q[hidden],.child[hidden]{display:none}
+.q > label.t,.q > .t{display:block;font-weight:600;margin-bottom:10px}
+.opt{font-weight:400;color:var(--slate);font-size:13px}
+.hint{font-size:13px;color:var(--slate);margin:-6px 0 10px}
+input[type=text],input[type=tel],input[type=password],input[type=date],input[type=number],select{
+  width:100%;font:inherit;padding:11px 12px;border:1px solid #B9C2CF;border-radius:8px;background:#fff;color:var(--ink)}
+input:focus-visible,select:focus-visible,button:focus-visible,.choice input:focus-visible+span{outline:3px solid #7FA2DC;outline-offset:2px}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;width:1px;height:1px}
+.choice span{display:inline-block;padding:10px 16px;border:1.5px solid #B9C2CF;border-radius:999px;background:#fff;cursor:pointer;font-size:15px;min-height:44px;line-height:22px}
+.choice input:checked+span{background:var(--navy);border-color:var(--navy);color:#fff}
+.choices.col{flex-direction:column}
+.choices.col .choice span{border-radius:8px;width:100%}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.child{border:1px dashed #9EABBE;border-radius:10px;padding:14px;margin-top:12px;background:#F8FAFC}
+.child h3{margin:0 0 10px;font-size:16px;color:var(--navy)}
+.child .f{margin-bottom:12px}
+.child .f > .t{display:block;font-weight:600;font-size:15px;margin-bottom:6px}
+.lookmsg{margin:10px 0 0;font-size:14px}
+.lookmsg.bad{color:var(--err)}
+.lookmsg.good{color:var(--ok)}
+.result{background:var(--pick);border-left:4px solid var(--navy);padding:12px 14px;border-radius:6px;margin-bottom:12px;font-size:15px}
+.err{color:var(--err);font-size:13px;margin-top:8px;display:none}
+.q.bad{border-color:var(--err)}
+.q.bad .err{display:block}
+.nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 0 calc(12px + env(safe-area-inset-bottom,0px))}
+.nav .wrap{display:flex;gap:10px}
+button{font:inherit;font-weight:600;border-radius:8px;padding:12px 18px;min-height:46px;cursor:pointer;border:1.5px solid var(--navy)}
+.back{background:#fff;color:var(--navy)}
+.next{background:var(--navy);color:#fff;flex:1}
+.next:disabled{opacity:.6;cursor:wait}
+dl.sum{margin:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 16px}
+dl.sum div{display:grid;grid-template-columns:44% 1fr;gap:10px;padding:8px 0;border-bottom:1px solid #EEF1F5;font-size:14px}
+dl.sum div:last-child{border-bottom:0}
+dl.sum dt{color:var(--slate)}
+dl.sum dd{margin:0;font-weight:500;word-break:break-word}
+.done-box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;text-align:left}
+.done-box h2{color:var(--ok)}
+.link{background:none;border:0;color:var(--navy);text-decoration:underline;padding:0;min-height:0;font-weight:600}
+.privacy{font-size:13px;color:var(--slate);margin-top:14px}
+@media (max-width:420px){ .row2{grid-template-columns:1fr} header h1{font-size:21px} }
+@media (prefers-reduced-motion:no-preference){ section.step.active{animation:in .18s ease-out} @keyframes in{from{opacity:.4}to{opacity:1}} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="org">JSW Cement Limited, Nandyal Works</p>
+    <h1>Township accommodation form</h1>
+    <p id="subline">Takes about 5 minutes. Last date: <span id="lastdate"></span></p>
+    <ol class="steps" id="bar" aria-hidden="true"></ol>
+    <div class="stepname" id="stepname"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="banner" id="testbanner" hidden>Test mode: answers are not saved. Use Employee ID 1234567 and last 4 digits 0000 to try the form.</div>
+  <form id="f" novalidate autocomplete="on">
+
+  <!-- STEP 1 -->
+  <section class="step" data-step="about" data-title="About you">
+    <h2>About you</h2>
+    <p class="lead">Enter your Employee ID and the last 4 digits of your mobile number registered with HR. Your details will be filled in from HR records.</p>
+
+    <div class="q" id="lookup_q"><span class="t">Find your details</span>
+      <div class="row2">
+        <div><label for="emp_id" class="opt">Employee ID</label>
+          <input type="text" id="emp_id" name="emp_id" inputmode="numeric" maxlength="7" required data-check="empid" autocomplete="off"></div>
+        <div><label for="m4" class="opt">Last 4 digits of mobile</label>
+          <input type="password" id="m4" name="m4" inputmode="numeric" maxlength="4" required data-check="m4" autocomplete="off"></div>
+      </div>
+      <p style="margin:12px 0 0"><button type="button" class="back" id="find">Find my details</button></p>
+      <p class="lookmsg" id="lookmsg" role="status"></p>
+      <p style="margin:6px 0 0" id="manual_link_p" hidden><button type="button" class="link" id="manual_link">I joined recently or my details are not found – fill manually</button></p>
+      <div class="err" id="lookup_err">Find your details first, or choose to fill manually.</div>
+    </div>
+
+    <div class="q" data-if="found"><span class="t">Your details from HR records</span>
+      <dl class="sum" id="emp_card" style="border:0;padding:0"></dl>
+      <span class="t" style="margin-top:12px">Are these details correct?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="details_ok" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="details_ok" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="detailsWrong"><label class="t" for="details_issue">What is wrong?</label>
+      <input type="text" id="details_issue" name="details_issue" required placeholder="e.g. Department has changed to Electrical">
+      <div class="err">Tell us what is wrong. HR will correct it.</div></div>
+
+    <div class="q" data-if="manual"><span class="t">Your details</span>
+      <div class="f2"><label for="emp_name" class="opt">Full name</label><input type="text" id="emp_name" name="emp_name" required autocomplete="name"></div>
+      <div class="row2" style="margin-top:10px">
+        <div><label for="department" class="opt">Department</label><select id="department" name="department" required><option value="">Select</option></select></div>
+        <div><label for="designation" class="opt">Designation</label><input type="text" id="designation" name="designation" required></div>
+      </div>
+      <div class="row2" style="margin-top:10px">
+        <div><label for="gender" class="opt">Gender</label><select id="gender" name="gender" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+        <div><label for="dob" class="opt">Date of birth</label><input type="date" id="dob" name="dob" required min="1955-01-01" max="2009-12-31"></div>
+      </div>
+      <div class="err">Fill all your details.</div></div>
+
+    <div class="q" data-if="idDone"><label class="t" for="mobile">Current mobile number</label>
+      <input type="tel" id="mobile" name="mobile" inputmode="numeric" maxlength="10" required data-check="mobile" autocomplete="tel-national">
+      <div class="err">Enter a 10-digit mobile number.</div></div>
+
+    <div class="q" data-if="idDone"><span class="t">Marital status</span>
+      <p class="hint" id="marital_hint" hidden>Filled from HR records. Change it only if it has changed.</p>
+      <div class="choices col">
+        <label class="choice"><input type="radio" name="marital" value="Married" required><span>Married</span></label>
+        <label class="choice"><input type="radio" name="marital" value="Unmarried"><span>Unmarried</span></label>
+        <label class="choice"><input type="radio" name="marital" value="Single"><span>Single – widowed, divorced or separated</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="idDone"><span class="t">Do you want township accommodation?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="want" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="want" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="wantNo"><span class="t">Main reason</span>
+      <div class="choices col">
+        <label class="choice"><input type="radio" name="no_reason" value="Own house nearby" required><span>Own house nearby</span></label>
+        <label class="choice"><input type="radio" name="no_reason" value="Family staying elsewhere, will manage"><span>Family staying elsewhere, I will manage</span></label>
+        <label class="choice"><input type="radio" name="no_reason" value="Prefer outside accommodation"><span>Prefer to stay outside</span></label>
+        <label class="choice"><input type="radio" name="no_reason" value="Other"><span>Other</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="noReasonOther"><label class="t" for="no_reason_other">Please specify</label>
+      <input type="text" id="no_reason_other" name="no_reason_other" required><div class="err">Please specify.</div></div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step" data-step="need" data-if="wantYes" data-title="Your need">
+    <h2>Who will stay with you</h2>
+    <p class="lead">This decides whether you get a family flat or a twin-sharing room.</p>
+
+    <div class="q" data-if="married"><span class="t">Will your family (spouse and children) stay with you in the township?</span>
+      <div class="choices col">
+        <label class="choice"><input type="radio" name="fam_move" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="fam_move" value="No"><span>No, I will stay alone</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="notMarried"><span class="t">Will your parents stay with you?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="parents_stay" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="parents_stay" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="single"><span class="t">Do you have children who will stay with you?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="s_children" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="s_children" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="notMarried"><span class="t">Will any brother, sister or other dependent stay with you?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="nm_others" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="nm_others" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="result" id="acc_result" data-if="accKnown"></div>
+
+    <div class="q" data-if="married"><span class="t">Is your spouse also a JSW employee at Nandyal?</span>
+      <p class="hint">One flat is allotted per couple.</p>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="spouse_jsw" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="spouse_jsw" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="spouseJsw"><label class="t" for="spouse_emp_id">Spouse's Employee ID</label>
+      <input type="text" id="spouse_emp_id" name="spouse_emp_id" inputmode="numeric" maxlength="8" required data-check="empid">
+      <div class="err">Enter a 7-digit Employee ID.</div></div>
+
+    <div class="q"><span class="t">Do you or your family own a house within 25 km of the plant?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="house25" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="house25" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q"><span class="t">Where are you staying now?</span>
+      <div class="choices col">
+        <label class="choice"><input type="radio" name="current_stay" value="Nandyal town" required><span>Nandyal town</span></label>
+        <label class="choice"><input type="radio" name="current_stay" value="Other nearby town"><span>Other nearby town</span></label>
+        <label class="choice"><input type="radio" name="current_stay" value="Company guest house"><span>Company guest house</span></label>
+        <label class="choice"><input type="radio" name="current_stay" value="Other"><span>Other</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q"><label class="t" for="movein">Earliest date you can move in</label>
+      <input type="date" id="movein" name="movein" required min="2026-10-01" max="2027-06-30">
+      <div class="err">Choose a date.</div></div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step" data-step="family" data-if="family" data-title="Family details">
+    <h2>Family staying with you</h2>
+    <p class="lead">Count only people who will live in the flat full time.</p>
+
+    <div class="q" data-if="married"><span class="t">Will your spouse stay with you?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="spouse_stay" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="spouse_stay" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="spouseStay"><span class="t">Is your spouse working?</span>
+      <div class="choices col">
+        <label class="choice"><input type="radio" name="spouse_work" value="Not working" required><span>Not working</span></label>
+        <label class="choice"><input type="radio" name="spouse_work" value="Working in Nandyal"><span>Working in Nandyal</span></label>
+        <label class="choice"><input type="radio" name="spouse_work" value="Working elsewhere"><span>Working elsewhere</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="askChildren"><label class="t" for="child_count">Number of children who will stay with you</label>
+      <select id="child_count" name="child_count" required>
+        <option value="">Select</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+      </select>
+      <div id="children"></div>
+      <div class="err">Select the number of children and fill all details for each child.</div>
+    </div>
+
+    <div class="q" data-if="hasSchoolChild"><span class="t">Will you need school bus from the township?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="school_bus" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="school_bus" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="hasSmallChild"><span class="t">Will you need a crèche or day care?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="creche" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="creche" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="hasChildren"><span class="t">Does any child have special needs that need support or a lower floor?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="child_special" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="child_special" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="askParents"><label class="t" for="parent_count" id="parent_label">Parents or in-laws who will stay with you</label>
+      <select id="parent_count" name="parent_count" required>
+        <option value="">Select</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+      </select><div class="err">Select a number.</div></div>
+
+    <div class="q" data-if="hasParents"><span class="t">Is any of them aged 65 or above?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="parent65" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="parent65" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="askOthers"><label class="t" for="other_count">Other dependents staying (brother, sister etc.)</label>
+      <select id="other_count" name="other_count" required>
+        <option value="">Select</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+      </select><div class="err">Select a number.</div></div>
+
+    <div class="q" data-if="hasOthers"><label class="t" for="other_relation">Their relation to you</label>
+      <input type="text" id="other_relation" name="other_relation" required placeholder="e.g. Younger brother (student)">
+      <div class="err">Enter the relation.</div></div>
+
+    <div class="result" id="family_total"></div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step" data-step="floor" data-if="wantYes" data-title="Stairs and floor">
+    <h2>Stairs and floor</h2>
+    <p class="lead">The township buildings have no lift. Answer Yes or No only; do not write any illness. If you answer Yes, the OHC doctor will check privately.</p>
+
+    <div class="q"><span class="t">Does anyone who will stay in the flat find climbing stairs difficult for a medical reason?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="stairs" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="stairs" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="stairsYes"><span class="t">Who? <span class="opt">Select all that apply</span></span>
+      <div class="choices" id="stairs_who_box"></div>
+      <div class="err">Select at least one.</div></div>
+
+    <div class="q"><span class="t">Does anyone use a wheelchair or walker?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="mobility_aid" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="mobility_aid" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="askTemp"><span class="t">Do you need a ground or 1st floor for a short period, for pregnancy or a baby under 1 year?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="temp_low" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="temp_low" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="step" data-step="other" data-if="wantYes" data-title="Other details">
+    <h2>Other details</h2>
+    <p class="lead">Helps plan parking, mess and common facilities.</p>
+
+    <div class="q"><span class="t">Vehicles you will park</span>
+      <div class="row2">
+        <div><label for="two_wheelers" class="opt">Two-wheelers</label>
+          <select id="two_wheelers" name="two_wheelers" required><option>0</option><option>1</option><option>2</option><option>3</option></select></div>
+        <div><label for="four_wheelers" class="opt">Four-wheelers</label>
+          <select id="four_wheelers" name="four_wheelers" required><option>0</option><option>1</option><option>2</option></select></div>
+      </div></div>
+
+    <div class="q" data-if="twin"><label class="t" for="roommate">Preferred roommate's Employee ID <span class="opt">Optional</span></label>
+      <p class="hint">The Committee will try to match, but it is not guaranteed.</p>
+      <input type="text" id="roommate" name="roommate" inputmode="numeric" maxlength="8" data-check="empidOpt">
+      <div class="err">Enter a 7-digit Employee ID or leave blank.</div></div>
+
+    <div class="q" data-if="twin"><span class="t">Food preference</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="food" value="Vegetarian" required><span>Vegetarian</span></label>
+        <label class="choice"><input type="radio" name="food" value="Non-vegetarian"><span>Non-vegetarian</span></label>
+        <label class="choice"><input type="radio" name="food" value="Eggetarian"><span>Eggetarian</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q"><span class="t">Will you use a mess or canteen in the township?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="mess" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="mess" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q" data-if="family"><span class="t">Do you need a live-in domestic help?</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="live_in_help" value="Yes" required><span>Yes</span></label>
+        <label class="choice"><input type="radio" name="live_in_help" value="No"><span>No</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q"><span class="t">Pets</span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="pets" value="None" required><span>None</span></label>
+        <label class="choice"><input type="radio" name="pets" value="Dog"><span>Dog</span></label>
+        <label class="choice"><input type="radio" name="pets" value="Cat"><span>Cat</span></label>
+        <label class="choice"><input type="radio" name="pets" value="Other"><span>Other</span></label>
+      </div><div class="err">Select one.</div></div>
+
+    <div class="q"><span class="t">Facilities you will use <span class="opt">Optional, select all that apply</span></span>
+      <div class="choices">
+        <label class="choice"><input type="checkbox" name="facilities" value="Gym"><span>Gym</span></label>
+        <label class="choice" data-if="hasChildren"><input type="checkbox" name="facilities" value="Children play area"><span>Children play area</span></label>
+        <label class="choice"><input type="checkbox" name="facilities" value="Community hall"><span>Community hall</span></label>
+        <label class="choice"><input type="checkbox" name="facilities" value="Temple"><span>Temple</span></label>
+        <label class="choice"><input type="checkbox" name="facilities" value="Grocery store"><span>Grocery store</span></label>
+        <label class="choice"><input type="checkbox" name="facilities" value="Clinic"><span>Clinic</span></label>
+        <label class="choice"><input type="checkbox" name="facilities" value="Sports ground"><span>Sports ground</span></label>
+      </div></div>
+
+    <div class="q"><span class="t">Emergency contact</span>
+      <div class="row2">
+        <div><label for="emg_name" class="opt">Name and relation</label><input type="text" id="emg_name" name="emg_name" required></div>
+        <div><label for="emg_mobile" class="opt">Mobile</label><input type="tel" id="emg_mobile" name="emg_mobile" inputmode="numeric" maxlength="10" required data-check="mobile"></div>
+      </div><div class="err">Enter a name and a 10-digit mobile number.</div></div>
+  </section>
+
+  <!-- STEP 6 -->
+  <section class="step" data-step="review" data-title="Check and submit">
+    <h2>Check and submit</h2>
+    <p class="lead">Check your answers. Use Back to change anything.</p>
+    <dl class="sum" id="summary"></dl>
+    <div class="q" style="margin-top:14px">
+      <label class="choice" style="display:block"><input type="checkbox" name="declare" value="Agreed" required>
+        <span style="border-radius:8px;display:block">I confirm these answers are true. False information will cancel the allotment, and I will follow the Township Allotment Rules.</span></label>
+      <div class="err">Tick to confirm before submitting.</div></div>
+    <p class="privacy">Your answers are seen only by HR and the Township Committee, and are used only for township allotment. You can submit again before the last date; your latest answers will replace the earlier ones.</p>
+  </section>
+
+  <!-- DONE -->
+  <section class="step" data-step="done" data-title="Submitted">
+    <div class="done-box">
+      <h2 id="done_title">Form submitted</h2>
+      <p id="done_msg"></p>
+      <p><button type="button" class="link" id="dl">Download a copy of my answers</button></p>
+      <p class="privacy" id="done_contact"></p>
+    </div>
+  </section>
+  </form>
+</main>
+
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <button type="button" class="back" id="back">Back</button>
+    <button type="button" class="next" id="next">Next</button>
+  </div>
+</nav>
+
+<script>
+(function(){
+const form=document.getElementById('f');
+const $=s=>form.querySelector(s), $$=s=>[...form.querySelectorAll(s)];
+const DRAFT='township_form_draft_v1';
+document.getElementById('lastdate').textContent=CONFIG.LAST_DATE;
+document.getElementById('testbanner').hidden=!!CONFIG.SUBMIT_URL;
+const dep=$('#department'); CONFIG.DEPARTMENTS.forEach(d=>{const o=document.createElement('option');o.textContent=d;dep.appendChild(o)});
+
+/* ---------- read answers ---------- */
+function val(n){const els=form.elements[n]; if(!els) return '';
+  if(els instanceof RadioNodeList){ const c=[...els].filter(e=>e.checked); if(!c.length) return ''; return els[0].type==='checkbox'?c.map(e=>e.value):c[0].value; }
+  if(els.type==='checkbox') return els.checked?els.value:''; return els.value.trim();}
+const num=n=>parseInt(val(n)||'0',10);
+const SCHOOL=['Play school – UKG','Class 1–5','Class 6–10','Class 11–12'];
+
+/* ---------- conditions ---------- */
+let EMP=null, MANUAL=false;
+const C={
+  found:()=>!!EMP, manual:()=>MANUAL, idDone:()=>!!EMP||MANUAL,
+  detailsWrong:()=>!!EMP&&val('details_ok')==='No',
+  wantYes:()=>C.idDone()&&val('want')==='Yes', wantNo:()=>C.idDone()&&val('want')==='No',
+  noReasonOther:()=>C.wantNo()&&val('no_reason')==='Other',
+  married:()=>C.wantYes()&&val('marital')==='Married',
+  single:()=>C.wantYes()&&val('marital')==='Single',
+  notMarried:()=>C.wantYes()&&['Unmarried','Single'].includes(val('marital')),
+  spouseJsw:()=>C.married()&&val('spouse_jsw')==='Yes',
+  accType:()=>{ if(!C.wantYes()) return '';
+    const m=val('marital');
+    if(m==='Married'){ const f=val('fam_move'); return f==='Yes'?'Family flat':f==='No'?'Twin sharing':''; }
+    if(m==='Unmarried'){ const p=val('parents_stay'),o=val('nm_others'); if(!p||!o) return ''; return (p==='Yes'||o==='Yes')?'Family flat':'Twin sharing'; }
+    if(m==='Single'){ const p=val('parents_stay'),c=val('s_children'),o=val('nm_others'); if(!p||!c||!o) return ''; return (p==='Yes'||c==='Yes'||o==='Yes')?'Family flat':'Twin sharing'; }
+    return ''; },
+  accKnown:()=>!!C.accType(),
+  family:()=>C.accType()==='Family flat', twin:()=>C.accType()==='Twin sharing',
+  spouseStay:()=>C.family()&&val('marital')==='Married'&&val('spouse_stay')==='Yes',
+  askChildren:()=>C.family()&&(val('marital')==='Married'||val('s_children')==='Yes'),
+  hasChildren:()=>C.askChildren()&&num('child_count')>0,
+  hasSchoolChild:()=>C.hasChildren()&&kids().some(k=>SCHOOL.includes(k.stage)),
+  hasSmallChild:()=>C.hasChildren()&&kids().some(k=>k.age!==''&&+k.age<3),
+  askParents:()=>C.family()&&(val('marital')==='Married'||val('parents_stay')==='Yes'),
+  hasParents:()=>C.askParents()&&num('parent_count')>0,
+  askOthers:()=>C.family()&&(val('marital')==='Married'||val('nm_others')==='Yes'),
+  hasOthers:()=>C.askOthers()&&num('other_count')>0,
+  stairsYes:()=>C.wantYes()&&val('stairs')==='Yes',
+  askTemp:()=>C.family()&&val('marital')==='Married'&&val('spouse_stay')==='Yes'
+};
+
+/* ---------- children blocks ---------- */
+function kids(){const n=C.askChildren()?num('child_count'):0,a=[];
+  for(let i=1;i<=n;i++) a.push({age:val('child'+i+'_age'),gender:val('child'+i+'_gender'),stage:val('child'+i+'_stage'),school:val('child'+i+'_school'),board:val('child'+i+'_board')});
+  return a;}
+function childBlock(i){
+  const r=(name,opts)=>opts.map(o=>`<label class="choice"><input type="radio" name="${name}" value="${o}" required><span>${o}</span></label>`).join('');
+  const d=document.createElement('div'); d.className='child'; d.dataset.child=i;
+  d.innerHTML=`<h3>Child ${i}</h3>
+   <div class="f"><label class="t" for="child${i}_age">Age in years</label><input type="number" id="child${i}_age" name="child${i}_age" min="0" max="30" inputmode="numeric" required></div>
+   <div class="f"><span class="t">Gender</span><div class="choices">${r('child'+i+'_gender',['Boy','Girl'])}</div></div>
+   <div class="f"><label class="t" for="child${i}_stage">Current stage</label><select id="child${i}_stage" name="child${i}_stage" required>
+     <option value="">Select</option><option>Below 3 years (not in school)</option><option>Play school – UKG</option><option>Class 1–5</option><option>Class 6–10</option><option>Class 11–12</option><option>College or working</option></select></div>
+   <div class="f" data-cs="${i}"><label class="t" for="child${i}_school">School near the township</label><select id="child${i}_school" name="child${i}_school" required>
+     <option value="">Select</option><option>Already studying in Nandyal</option><option>Need admission for 2026-27</option><option>Need admission from 2027-28</option><option>Not needed</option></select></div>
+   <div class="f" data-cs="${i}"><span class="t">Preferred board</span><div class="choices">${r('child'+i+'_board',['State','CBSE','ICSE','No preference'])}</div></div>
+`;
+  return d;}
+function syncChildren(){const box=document.getElementById('children');const n=C.askChildren()?num('child_count'):0;
+  while(box.children.length<n) box.appendChild(childBlock(box.children.length+1));
+  [...box.children].forEach((c,k)=>{c.hidden=k>=n; const i=k+1; const st=val('child'+i+'_stage');
+    c.querySelectorAll('[data-cs]').forEach(x=>x.hidden=!SCHOOL.includes(st));});}
+
+/* ---------- stairs "who" options ---------- */
+function syncStairsWho(){const box=document.getElementById('stairs_who_box');
+  const prev=[].concat(val('stairs_who')||[]); const opts=['Self'];
+  if(C.spouseStay()) opts.push('Spouse'); if(C.hasChildren()) opts.push('Child');
+  if(C.hasParents()) opts.push('Parent / in-law'); if(C.hasOthers()) opts.push('Other dependent');
+  const key=opts.join('|'); if(box.dataset.k===key) return; box.dataset.k=key;
+  box.innerHTML=opts.map(o=>`<label class="choice"><input type="checkbox" name="stairs_who" value="${o}" ${prev.includes(o)?'checked':''}><span>${o}</span></label>`).join('');}
+
+/* ---------- apply visibility ---------- */
+function apply(){
+  syncChildren(); syncStairsWho();
+  $$('[data-if]').forEach(el=>{ if(el.matches('section.step')) return; el.hidden=!C[el.dataset.if](); });
+  const a=C.accType(), res=document.getElementById('acc_result');
+  res.textContent=a?`Based on your answers, you will be considered for: ${a}.`:'';
+  const m=val('marital'); document.getElementById('parent_label').textContent=m==='Married'?'Parents or in-laws who will stay with you':'Parents who will stay with you';
+  const pc=$('#parent_count'); if(C.askParents()&&m!=='Married'&&val('parents_stay')==='Yes'){ [...pc.options].forEach(o=>{if(o.value==='0')o.hidden=true}); if(pc.value==='0')pc.value=''; } else [...pc.options].forEach(o=>o.hidden=false);
+  const cc=$('#child_count'); if(val('marital')==='Single'){ [...cc.options].forEach(o=>{if(o.value==='0')o.hidden=true}); if(cc.value==='0')cc.value=''; } else [...cc.options].forEach(o=>o.hidden=false);
+  const oc=$('#other_count'); if(val('marital')!=='Married'&&val('nm_others')==='Yes'){ [...oc.options].forEach(o=>{if(o.value==='0')o.hidden=true}); if(oc.value==='0')oc.value=''; } else [...oc.options].forEach(o=>o.hidden=false);
+  const ft=document.getElementById('family_total');
+  if(C.family()){ const t=1+(C.spouseStay()?1:0)+(C.hasChildren()?num('child_count'):0)+(C.hasParents()?num('parent_count'):0)+(C.hasOthers()?num('other_count'):0);
+    ft.textContent=`Total people in the flat, including you: ${t}`; ft.hidden=false;} else ft.hidden=true;
+}
+
+/* ---------- steps ---------- */
+const steps=$$('section.step'); let cur=0;
+const applicable=()=>steps.filter(s=>s.dataset.step!=='done'&&(!s.dataset.if||C[s.dataset.if]()));
+function show(i){steps.forEach(s=>s.classList.remove('active')); const s=steps[i]; s.classList.add('active'); cur=i;
+  const list=applicable(), pos=list.indexOf(s), bar=document.getElementById('bar');
+  bar.innerHTML=list.map((x,k)=>`<li class="${k<pos?'done':k===pos?'now':''}"></li>`).join('');
+  document.getElementById('stepname').textContent=s.dataset.step==='done'?'':`Step ${pos+1} of ${list.length}: ${s.dataset.title}`;
+  document.getElementById('back').hidden=pos<=0||s.dataset.step==='done';
+  document.getElementById('nav').hidden=s.dataset.step==='done';
+  document.getElementById('next').textContent=s.dataset.step==='review'?'Submit':'Next';
+  if(s.dataset.step==='review') buildSummary();
+  window.scrollTo({top:0});}
+
+/* ---------- validation ---------- */
+const CHECK={m4:v=>/^\d{4}$/.test(v), empid:v=>/^\d{7}$/.test(v), empidOpt:v=>v===''||/^\d{7}$/.test(v), mobile:v=>/^[6-9]\d{9}$/.test(v)};
+function validate(sec){let first=null;
+  sec.querySelectorAll('.q').forEach(q=>{ if(q.hidden||q.closest('[hidden]')) return; let ok=true;
+    const inputs=[...q.querySelectorAll('input,select')].filter(e=>!e.closest('[hidden]'));
+    const names=[...new Set(inputs.map(e=>e.name))];
+    names.forEach(n=>{const els=inputs.filter(e=>e.name===n), e=els[0], v=val(n);
+      if(e.required&&(Array.isArray(v)?!v.length:!v)) ok=false;
+      if(e.dataset.check&&!CHECK[e.dataset.check](typeof v==='string'?v:'')) ok=false;
+      if(e.type==='number'&&v!==''&&(+v<+e.min||+v>+e.max)) ok=false;});
+    if(q.querySelector('#stairs_who_box')&&!(val('stairs_who')||[]).length) ok=false;
+    if(q.id==='lookup_q'&&!C.idDone()) ok=false;
+    q.classList.toggle('bad',!ok); if(!ok&&!first) first=q;});
+  if(first){first.scrollIntoView({behavior:'smooth',block:'center'}); const f=first.querySelector('input,select'); if(f) f.focus({preventScroll:true});}
+  return !first;}
+
+/* ---------- collect ---------- */
+function collect(){const d={submitted_at:new Date().toISOString()};
+  const add=(k,v)=>{d[k]=Array.isArray(v)?v.join(', '):v;};
+  add('emp_id',val('emp_id')); add('m4',val('m4'));
+  if(EMP){ add('source','HR record'); add('emp_name',EMP.name); add('designation',EMP.designation); add('department',EMP.department); add('grade',EMP.grade);
+    add('gender',EMP.gender); add('dob',EMP.dob); add('doj',EMP.doj); add('marital_hr',EMP.marital); add('details_ok',val('details_ok'));
+    if(val('details_ok')==='No') add('details_issue',val('details_issue')); }
+  else { add('source','Manual entry'); ['emp_name','department','designation','gender','dob'].forEach(k=>add(k,val(k))); }
+  ['mobile','marital','want'].forEach(k=>add(k,val(k)));
+  if(C.wantNo()){add('no_reason',val('no_reason')); if(C.noReasonOther()) add('no_reason_other',val('no_reason_other'));}
+  if(C.wantYes()){
+    add('accommodation_type',C.accType());
+    ['fam_move','parents_stay','s_children','nm_others','spouse_jsw','spouse_emp_id'].forEach(k=>{ const el=form.elements[k]; const q=(el instanceof RadioNodeList?el[0]:el).closest('.q'); if(q&&!q.hidden) add(k,val(k)); });
+    ['house25','current_stay','movein'].forEach(k=>add(k,val(k)));
+    if(C.family()){
+      if(val('marital')==='Married'){add('spouse_stay',val('spouse_stay')); if(C.spouseStay()) add('spouse_work',val('spouse_work'));}
+      add('child_count',C.askChildren()?num('child_count'):0);
+      kids().forEach((k,i)=>{const p='child'+(i+1)+'_'; add(p+'age',k.age); add(p+'gender',k.gender); add(p+'stage',k.stage);
+        if(SCHOOL.includes(k.stage)){add(p+'school',k.school); add(p+'board',k.board);}});
+      if(C.hasSchoolChild()) add('school_bus',val('school_bus'));
+      if(C.hasSmallChild()) add('creche',val('creche'));
+      if(C.hasChildren()) add('child_special',val('child_special'));
+      add('parent_count',C.askParents()?num('parent_count'):0); if(C.hasParents()) add('parent65',val('parent65'));
+      add('other_count',C.askOthers()?num('other_count'):0); if(C.hasOthers()) add('other_relation',val('other_relation'));
+      add('total_persons',document.getElementById('family_total').textContent.replace(/\D/g,''));
+    }
+    add('stairs',val('stairs')); if(C.stairsYes()) add('stairs_who',val('stairs_who'));
+    add('mobility_aid',val('mobility_aid')); if(C.askTemp()) add('temp_low',val('temp_low'));
+    ['two_wheelers','four_wheelers','mess','pets','emg_name','emg_mobile'].forEach(k=>add(k,val(k)));
+    add('facilities',val('facilities')||[]);
+    if(C.twin()){add('roommate',val('roommate')); add('food',val('food'));}
+    if(C.family()) add('live_in_help',val('live_in_help'));
+  }
+  add('declaration',val('declare')); return d;}
+
+const LABELS={source:'Details from',designation:'Designation',grade:'Grade',gender:'Gender',dob:'Date of birth',doj:'Date of joining',marital_hr:'Marital status (HR record)',details_ok:'HR details correct',details_issue:'Correction needed',emp_id:'Employee ID',emp_name:'Name',department:'Department',mobile:'Mobile',marital:'Marital status',want:'Wants accommodation',
+ no_reason:'Reason',no_reason_other:'Reason (details)',accommodation_type:'Considered for',fam_move:'Family will stay',parents_stay:'Parents will stay',
+ s_children:'Children will stay',nm_others:'Other dependents will stay',spouse_jsw:'Spouse is JSW employee',spouse_emp_id:"Spouse's Employee ID",house25:'Own house within 25 km',
+ current_stay:'Staying now',movein:'Can move in from',spouse_stay:'Spouse will stay',spouse_work:'Spouse working',child_count:'Children staying',
+ school_bus:'School bus needed',creche:'Crèche needed',child_special:'Child with special needs',parent_count:'Parents / in-laws staying',parent65:'Parent aged 65+',
+ other_count:'Other dependents',other_relation:'Relation',total_persons:'Total persons in flat',stairs:'Stair difficulty',stairs_who:'Who',mobility_aid:'Wheelchair / walker',
+ temp_low:'Temporary low floor',two_wheelers:'Two-wheelers',four_wheelers:'Four-wheelers',mess:'Mess needed',pets:'Pets',emg_name:'Emergency contact',emg_mobile:'Emergency mobile',
+ facilities:'Facilities',roommate:'Preferred roommate',food:'Food preference',live_in_help:'Live-in help'};
+function label(k){const m=k.match(/^child(\d)_(\w+)$/); if(m) return `Child ${m[1]} – ${({age:'age',gender:'gender',stage:'stage',school:'school near township',board:'board'})[m[2]]}`; return LABELS[k]||k;}
+function buildSummary(){const d=collect(), box=document.getElementById('summary'); box.innerHTML='';
+  Object.entries(d).forEach(([k,v])=>{ if(['submitted_at','declaration','m4'].includes(k)||v===''||v===undefined) return;
+    const row=document.createElement('div'); const dt=document.createElement('dt'); const dd=document.createElement('dd');
+    dt.textContent=label(k); dd.textContent=['movein'].includes(k)&&v?new Date(v).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):v;
+    row.append(dt,dd); box.appendChild(row);});}
+
+/* ---------- submit ---------- */
+let lastData=null;
+async function submit(){const btn=document.getElementById('next'); btn.disabled=true; btn.textContent='Submitting…';
+  const d=collect(); lastData=d; let ok=false, msg='';
+  if(!CONFIG.SUBMIT_URL){ ok=true; msg='Test mode: your answers were checked but not saved. Download a copy if needed.'; }
+  else { try{ const r=await fetch(CONFIG.SUBMIT_URL,{method:'POST',body:JSON.stringify(d)}); const j=await r.json(); ok=!!j.ok; if(!ok) msg=j.error||''; }
+         catch(e){ ok=false; } }
+  btn.disabled=false; btn.textContent='Submit';
+  const t=document.getElementById('done_title'), m=document.getElementById('done_msg');
+  if(ok){ t.textContent=CONFIG.SUBMIT_URL?'Form submitted':'Checked (test mode)'; t.style.color='';
+    m.textContent=msg||`Thank you, ${d.emp_name}. Your answers are saved against Employee ID ${d.emp_id}. HR will share the provisional list on the notice board.`;
+    try{localStorage.removeItem(DRAFT)}catch(e){} }
+  else { t.textContent='Not submitted'; t.style.color='var(--err)';
+    m.textContent='Your answers could not be sent. Check your internet and try again, or download a copy of your answers and send it to HR.'; }
+  document.getElementById('done_contact').textContent='Questions: '+CONFIG.HR_CONTACT+'.';
+  show(steps.findIndex(s=>s.dataset.step==='done'));
+  if(!ok){ const again=document.createElement('p'); again.innerHTML='<button type="button" class="link" id="retry">Try again</button>'; m.after(again);
+    document.getElementById('retry').onclick=()=>{again.remove(); show(steps.findIndex(s=>s.dataset.step==='review'));}; }}
+document.getElementById('dl').onclick=()=>{ if(!lastData) return;
+  const keys=Object.keys(lastData), esc=v=>`"${String(v).replace(/"/g,'""')}"`;
+  const csv=keys.map(k=>esc(label(k))+','+esc(lastData[k])).join('\r\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));
+  a.download=`township_form_${lastData.emp_id||'answers'}.csv`; document.body.appendChild(a); a.click(); a.remove(); };
+
+
+/* ---------- employee lookup ---------- */
+const DEMO={name:'Demo Employee',gender:'Male',dob:'15-06-1988',marital:'Married',department:'Mechanical',designation:'Assistant Manager',grade:'L08',doj:'01-04-2015'};
+function showEmp(){ const box=document.getElementById('emp_card'); box.innerHTML='';
+  [['Name',EMP.name],['Designation',EMP.designation],['Department',EMP.department],['Grade',EMP.grade],['Gender',EMP.gender],['Date of birth',EMP.dob],['Marital status',EMP.marital],['Date of joining',EMP.doj]]
+  .forEach(([a,b])=>{ if(!b) return; const r=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd'); dt.textContent=a; dd.textContent=b; r.append(dt,dd); box.appendChild(r); }); }
+function setMarital(m){ const map={Married:'Married',Unmarried:'Unmarried',Single:'Single'}; const v=map[m];
+  if(v&&!val('marital')) [...form.elements['marital']].forEach(e=>e.checked=e.value===v);
+  document.getElementById('marital_hint').hidden=!v; }
+async function lookup(){ const id=val('emp_id'), m4=val('m4'), msg=document.getElementById('lookmsg'), btn=document.getElementById('find');
+  const q=document.getElementById('lookup_q');
+  if(!CHECK.empid(id)||!CHECK.m4(m4)){ msg.className='lookmsg bad'; msg.textContent='Enter your 7-digit Employee ID and the last 4 digits of your mobile.'; return; }
+  btn.disabled=true; btn.textContent='Finding…'; msg.className='lookmsg'; msg.textContent='';
+  let res=null;
+  try{ if(!CONFIG.SUBMIT_URL) res=(id==='1234567'&&m4==='0000')?{ok:true,emp:DEMO}:{ok:false,error:'nomatch'};
+       else { const r=await fetch(CONFIG.SUBMIT_URL+'?action=lookup&id='+encodeURIComponent(id)+'&m4='+encodeURIComponent(m4)); res=await r.json(); } }
+  catch(e){ res={ok:false,error:'network'}; }
+  btn.disabled=false; btn.textContent='Find my details';
+  if(res&&res.ok){ EMP=res.emp; MANUAL=false; showEmp(); setMarital(EMP.marital); q.classList.remove('bad');
+    msg.className='lookmsg good'; msg.textContent='Details found. Please check them below.'; document.getElementById('manual_link_p').hidden=true; }
+  else { EMP=null; msg.className='lookmsg bad';
+    msg.textContent=res&&res.error==='locked'?'Too many wrong attempts. Try again after 30 minutes or contact HR.':
+      res&&res.error==='network'?'Could not connect. Check your internet and try again.':
+      'No match. Check your Employee ID and the last 4 digits of the mobile number registered with HR.';
+    document.getElementById('manual_link_p').hidden=false; }
+  apply(); }
+document.getElementById('find').onclick=lookup;
+document.getElementById('manual_link').onclick=()=>{ MANUAL=true; EMP=null; document.getElementById('lookmsg').textContent='Fill your details below. HR will verify them.'; document.getElementById('lookmsg').className='lookmsg'; document.getElementById('lookup_q').classList.remove('bad'); apply(); };
+['emp_id','m4'].forEach(n=>form.elements[n].addEventListener('input',()=>{ if(EMP){ EMP=null; document.getElementById('lookmsg').textContent=''; } }));
+form.elements['m4'].addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); lookup(); } });
+
+/* ---------- navigation ---------- */
+document.getElementById('next').onclick=()=>{ const s=steps[cur]; if(!validate(s)) return;
+  if(s.dataset.step==='review'){ submit(); return; }
+  const list=applicable(); show(steps.indexOf(list[list.indexOf(s)+1])); };
+document.getElementById('back').onclick=()=>{ const list=applicable(); const p=list.indexOf(steps[cur]); if(p>0) show(steps.indexOf(list[p-1])); };
+
+/* ---------- draft save / restore ---------- */
+function save(){ try{ const o={}; [...form.elements].forEach(e=>{ if(!e.name||e.name==='declare'||e.name==='m4') return;
+  if(e.type==='radio'||e.type==='checkbox'){ if(e.checked)(o[e.name]=o[e.name]||[]).push(e.value); } else o[e.name]=e.value; });
+  localStorage.setItem(DRAFT,JSON.stringify(o)); }catch(e){} }
+function restore(){ let o=null; try{o=JSON.parse(localStorage.getItem(DRAFT)||'null')}catch(e){} if(!o) return;
+  const set=()=>[...form.elements].forEach(e=>{ if(!e.name||!(e.name in o)) return;
+    if(e.type==='radio'||e.type==='checkbox') e.checked=[].concat(o[e.name]).includes(e.value); else e.value=o[e.name]; });
+  set(); apply(); set(); apply(); }
+
+form.addEventListener('input',e=>{ const q=e.target.closest('.q'); apply(); if(q) q.classList.remove('bad'); save(); });
+form.addEventListener('change',()=>{ apply(); save(); });
+form.addEventListener('submit',e=>e.preventDefault());
+restore(); apply(); show(0);
+})();
+</script>
+</body>
+</html>
