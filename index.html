@@ -98,7 +98,7 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
   <div class="wrap">
     <p class="org">JSW Cement Limited, Nandyal Works</p>
     <h1>Township accommodation form</h1>
-    <p id="subline">Takes about 5 minutes. Last date: <span id="lastdate"></span></p>
+    <p id="subline">Takes about 3 minutes. Last date: <span id="lastdate"></span></p>
     <ol class="steps" id="bar" aria-hidden="true"></ol>
     <div class="stepname" id="stepname"></div>
   </div>
@@ -225,9 +225,6 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
         <label class="choice"><input type="radio" name="current_stay" value="Other"><span>Other</span></label>
       </div><div class="err">Select one.</div></div>
 
-    <div class="q"><label class="t" for="movein">Earliest date you can move in</label>
-      <input type="date" id="movein" name="movein" required min="2026-10-01" max="2027-06-30">
-      <div class="err">Choose a date.</div></div>
   </section>
 
   <!-- STEP 3 -->
@@ -256,24 +253,6 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
       <div class="err">Select the number of children and fill all details for each child.</div>
     </div>
 
-    <div class="q" data-if="hasSchoolChild"><span class="t">Will you need school bus from the township?</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="school_bus" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="school_bus" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
-    <div class="q" data-if="hasSmallChild"><span class="t">Will you need a crèche or day care?</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="creche" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="creche" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
-    <div class="q" data-if="hasChildren"><span class="t">Does any child have special needs that need support or a lower floor?</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="child_special" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="child_special" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
     <div class="q" data-if="askParents"><label class="t" for="parent_count" id="parent_label">Parents or in-laws who will stay with you</label>
       <select id="parent_count" name="parent_count" required>
         <option value="">Select</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
@@ -297,38 +276,10 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
     <div class="result" id="family_total"></div>
   </section>
 
-  <!-- STEP 4 -->
-  <section class="step" data-step="floor" data-if="wantYes" data-title="Stairs and floor">
-    <h2>Stairs and floor</h2>
-    <p class="lead">The township buildings have no lift. Answer Yes or No only; do not write any illness. If you answer Yes, the OHC doctor will check privately.</p>
-
-    <div class="q"><span class="t">Does anyone who will stay in the flat find climbing stairs difficult for a medical reason?</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="stairs" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="stairs" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
-    <div class="q" data-if="stairsYes"><span class="t">Who? <span class="opt">Select all that apply</span></span>
-      <div class="choices" id="stairs_who_box"></div>
-      <div class="err">Select at least one.</div></div>
-
-    <div class="q"><span class="t">Does anyone use a wheelchair or walker?</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="mobility_aid" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="mobility_aid" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
-    <div class="q" data-if="askTemp"><span class="t">Do you need a ground or 1st floor for a short period, for pregnancy or a baby under 1 year?</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="temp_low" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="temp_low" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-  </section>
-
   <!-- STEP 5 -->
   <section class="step" data-step="other" data-if="wantYes" data-title="Other details">
     <h2>Other details</h2>
-    <p class="lead">Helps plan parking, mess and common facilities.</p>
+    <p class="lead">Helps plan parking and twin-sharing rooms.</p>
 
     <div class="q"><span class="t">Vehicles you will park</span>
       <div class="row2">
@@ -350,18 +301,6 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
         <label class="choice"><input type="radio" name="food" value="Eggetarian"><span>Eggetarian</span></label>
       </div><div class="err">Select one.</div></div>
 
-    <div class="q"><span class="t">Will you use a mess or canteen in the township?</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="mess" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="mess" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
-    <div class="q" data-if="family"><span class="t">Do you need a live-in domestic help?</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="live_in_help" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="live_in_help" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
     <div class="q"><span class="t">Pets</span>
       <div class="choices">
         <label class="choice"><input type="radio" name="pets" value="None" required><span>None</span></label>
@@ -370,22 +309,6 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
         <label class="choice"><input type="radio" name="pets" value="Other"><span>Other</span></label>
       </div><div class="err">Select one.</div></div>
 
-    <div class="q"><span class="t">Facilities you will use <span class="opt">Optional, select all that apply</span></span>
-      <div class="choices">
-        <label class="choice"><input type="checkbox" name="facilities" value="Gym"><span>Gym</span></label>
-        <label class="choice" data-if="hasChildren"><input type="checkbox" name="facilities" value="Children play area"><span>Children play area</span></label>
-        <label class="choice"><input type="checkbox" name="facilities" value="Community hall"><span>Community hall</span></label>
-        <label class="choice"><input type="checkbox" name="facilities" value="Temple"><span>Temple</span></label>
-        <label class="choice"><input type="checkbox" name="facilities" value="Grocery store"><span>Grocery store</span></label>
-        <label class="choice"><input type="checkbox" name="facilities" value="Clinic"><span>Clinic</span></label>
-        <label class="choice"><input type="checkbox" name="facilities" value="Sports ground"><span>Sports ground</span></label>
-      </div></div>
-
-    <div class="q"><span class="t">Emergency contact</span>
-      <div class="row2">
-        <div><label for="emg_name" class="opt">Name and relation</label><input type="text" id="emg_name" name="emg_name" required></div>
-        <div><label for="emg_mobile" class="opt">Mobile</label><input type="tel" id="emg_mobile" name="emg_mobile" inputmode="numeric" maxlength="10" required data-check="mobile"></div>
-      </div><div class="err">Enter a name and a 10-digit mobile number.</div></div>
   </section>
 
   <!-- STEP 6 -->
@@ -488,17 +411,9 @@ function syncChildren(){const box=document.getElementById('children');const n=C.
   [...box.children].forEach((c,k)=>{c.hidden=k>=n; const i=k+1; const st=val('child'+i+'_stage');
     c.querySelectorAll('[data-cs]').forEach(x=>x.hidden=!SCHOOL.includes(st));});}
 
-/* ---------- stairs "who" options ---------- */
-function syncStairsWho(){const box=document.getElementById('stairs_who_box');
-  const prev=[].concat(val('stairs_who')||[]); const opts=['Self'];
-  if(C.spouseStay()) opts.push('Spouse'); if(C.hasChildren()) opts.push('Child');
-  if(C.hasParents()) opts.push('Parent / in-law'); if(C.hasOthers()) opts.push('Other dependent');
-  const key=opts.join('|'); if(box.dataset.k===key) return; box.dataset.k=key;
-  box.innerHTML=opts.map(o=>`<label class="choice"><input type="checkbox" name="stairs_who" value="${o}" ${prev.includes(o)?'checked':''}><span>${o}</span></label>`).join('');}
-
 /* ---------- apply visibility ---------- */
 function apply(){
-  syncChildren(); syncStairsWho();
+  syncChildren();
   $$('[data-if]').forEach(el=>{ if(el.matches('section.step')) return; el.hidden=!C[el.dataset.if](); });
   const a=C.accType(), res=document.getElementById('acc_result');
   res.textContent=a?`Based on your answers, you will be considered for: ${a}.`:'';
@@ -552,25 +467,18 @@ function collect(){const d={submitted_at:new Date().toISOString()};
   if(C.wantYes()){
     add('accommodation_type',C.accType());
     ['fam_move','parents_stay','s_children','nm_others','spouse_jsw','spouse_emp_id'].forEach(k=>{ const el=form.elements[k]; const q=(el instanceof RadioNodeList?el[0]:el).closest('.q'); if(q&&!q.hidden) add(k,val(k)); });
-    ['house25','current_stay','movein'].forEach(k=>add(k,val(k)));
+    ['house25','current_stay'].forEach(k=>add(k,val(k)));
     if(C.family()){
       if(val('marital')==='Married'){add('spouse_stay',val('spouse_stay')); if(C.spouseStay()) add('spouse_work',val('spouse_work'));}
       add('child_count',C.askChildren()?num('child_count'):0);
       kids().forEach((k,i)=>{const p='child'+(i+1)+'_'; add(p+'age',k.age); add(p+'gender',k.gender); add(p+'stage',k.stage);
         if(SCHOOL.includes(k.stage)){add(p+'school',k.school); add(p+'board',k.board);}});
-      if(C.hasSchoolChild()) add('school_bus',val('school_bus'));
-      if(C.hasSmallChild()) add('creche',val('creche'));
-      if(C.hasChildren()) add('child_special',val('child_special'));
       add('parent_count',C.askParents()?num('parent_count'):0); if(C.hasParents()) add('parent65',val('parent65'));
       add('other_count',C.askOthers()?num('other_count'):0); if(C.hasOthers()) add('other_relation',val('other_relation'));
       add('total_persons',document.getElementById('family_total').textContent.replace(/\D/g,''));
     }
-    add('stairs',val('stairs')); if(C.stairsYes()) add('stairs_who',val('stairs_who'));
-    add('mobility_aid',val('mobility_aid')); if(C.askTemp()) add('temp_low',val('temp_low'));
-    ['two_wheelers','four_wheelers','mess','pets','emg_name','emg_mobile'].forEach(k=>add(k,val(k)));
-    add('facilities',val('facilities')||[]);
+    ['two_wheelers','four_wheelers','pets'].forEach(k=>add(k,val(k)));
     if(C.twin()){add('roommate',val('roommate')); add('food',val('food'));}
-    if(C.family()) add('live_in_help',val('live_in_help'));
   }
   add('declaration',val('declare')); return d;}
 
