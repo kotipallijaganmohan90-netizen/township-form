@@ -244,7 +244,7 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
   <!-- STEP 5 -->
   <section class="step" data-step="other" data-if="wantYes" data-title="Other details">
     <h2>Other details</h2>
-    <p class="lead">Helps plan parking and the mess for twin-sharing rooms.</p>
+    <p class="lead">Helps plan parking in the township.</p>
 
     <div class="q"><span class="t">Vehicles you will park</span>
       <div class="row2">
@@ -253,13 +253,6 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
         <div><label for="four_wheelers" class="opt">Four-wheelers</label>
           <select id="four_wheelers" name="four_wheelers" required><option>0</option><option>1</option><option>2</option></select></div>
       </div></div>
-
-    <div class="q" data-if="twin"><span class="t">Food preference</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="food" value="Vegetarian" required><span>Vegetarian</span></label>
-        <label class="choice"><input type="radio" name="food" value="Non-vegetarian"><span>Non-vegetarian</span></label>
-        <label class="choice"><input type="radio" name="food" value="Eggetarian"><span>Eggetarian</span></label>
-      </div><div class="err">Select one.</div></div>
 
   </section>
 
@@ -425,7 +418,6 @@ function collect(){const d={submitted_at:new Date().toISOString()};
       add('total_persons',document.getElementById('family_total').textContent.replace(/\D/g,''));
     }
     ['two_wheelers','four_wheelers'].forEach(k=>add(k,val(k)));
-    if(C.twin()) add('food',val('food'));
   }
   add('declaration',val('declare')); return d;}
 
