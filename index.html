@@ -69,6 +69,7 @@ input:focus-visible,select:focus-visible,button:focus-visible,.choice input:focu
 .lookmsg{margin:10px 0 0;font-size:14px}
 .lookmsg.bad{color:var(--err)}
 .lookmsg.good{color:var(--ok)}
+input[readonly]{background:#EEF1F5;color:var(--slate)}
 .result{background:var(--pick);border-left:4px solid var(--navy);padding:12px 14px;border-radius:6px;margin-bottom:12px;font-size:15px}
 .err{color:var(--err);font-size:13px;margin-top:8px;display:none}
 .q.bad{border-color:var(--err)}
@@ -104,50 +105,39 @@ dl.sum dd{margin:0;font-weight:500;word-break:break-word}
 </header>
 
 <main class="wrap">
-  <div class="banner" id="testbanner" hidden>Test mode: answers are not saved. Use Employee ID 1234567 and last 4 digits 0000 to try the form.</div>
+  <div class="banner" id="testbanner" hidden>Test mode: answers are not saved. Use Employee ID 1234567 to try the form.</div>
   <form id="f" novalidate autocomplete="on">
 
   <!-- STEP 1 -->
   <section class="step" data-step="about" data-title="About you">
     <h2>About you</h2>
-    <p class="lead">Enter your Employee ID and the last 4 digits of your mobile number registered with HR. Your details will be filled in from HR records.</p>
+    <p class="lead">Enter your Employee ID. Your details will be filled in from HR records, and you can correct them.</p>
 
-    <div class="q" id="lookup_q"><span class="t">Find your details</span>
-      <div class="row2">
-        <div><label for="emp_id" class="opt">Employee ID</label>
-          <input type="text" id="emp_id" name="emp_id" inputmode="numeric" maxlength="7" required data-check="empid" autocomplete="off"></div>
-        <div><label for="m4" class="opt">Last 4 digits of mobile</label>
-          <input type="password" id="m4" name="m4" inputmode="numeric" maxlength="4" required data-check="m4" autocomplete="off"></div>
-      </div>
+    <div class="q" id="lookup_q"><label class="t" for="emp_id">Employee ID</label>
+      <input type="text" id="emp_id" name="emp_id" inputmode="numeric" maxlength="7" required data-check="empid" autocomplete="off">
       <p style="margin:12px 0 0"><button type="button" class="back" id="find">Find my details</button></p>
       <p class="lookmsg" id="lookmsg" role="status"></p>
       <p style="margin:6px 0 0" id="manual_link_p" hidden><button type="button" class="link" id="manual_link">I joined recently or my details are not found – fill manually</button></p>
       <div class="err" id="lookup_err">Find your details first, or choose to fill manually.</div>
     </div>
 
-    <div class="q" data-if="found"><span class="t">Your details from HR records</span>
-      <dl class="sum" id="emp_card" style="border:0;padding:0"></dl>
-      <span class="t" style="margin-top:12px">Are these details correct?</span>
-      <div class="choices">
-        <label class="choice"><input type="radio" name="details_ok" value="Yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="details_ok" value="No"><span>No</span></label>
-      </div><div class="err">Select one.</div></div>
-
-    <div class="q" data-if="detailsWrong"><label class="t" for="details_issue">What is wrong?</label>
-      <input type="text" id="details_issue" name="details_issue" required placeholder="e.g. Department has changed to Electrical">
-      <div class="err">Tell us what is wrong. HR will correct it.</div></div>
-
-    <div class="q" data-if="manual"><span class="t">Your details</span>
-      <div class="f2"><label for="emp_name" class="opt">Full name</label><input type="text" id="emp_name" name="emp_name" required autocomplete="name"></div>
+    <div class="q" data-if="idDone"><span class="t">Your details</span>
+      <p class="hint" id="det_hint">Filled from HR records. Correct anything that has changed. Date of birth cannot be changed here; contact HR if it is wrong.</p>
+      <div><label for="emp_name" class="opt">Full name</label><input type="text" id="emp_name" name="emp_name" required autocomplete="name"></div>
+      <div class="row2" style="margin-top:10px">
+        <div><label for="gender" class="opt">Gender</label><select id="gender" name="gender" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+        <div><label for="dob" class="opt">Date of birth</label><input type="date" id="dob" name="dob" required min="1955-01-01" max="2009-12-31"></div>
+      </div>
       <div class="row2" style="margin-top:10px">
         <div><label for="department" class="opt">Department</label><select id="department" name="department" required><option value="">Select</option></select></div>
         <div><label for="designation" class="opt">Designation</label><input type="text" id="designation" name="designation" required></div>
       </div>
       <div class="row2" style="margin-top:10px">
-        <div><label for="gender" class="opt">Gender</label><select id="gender" name="gender" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
-        <div><label for="dob" class="opt">Date of birth</label><input type="date" id="dob" name="dob" required min="1955-01-01" max="2009-12-31"></div>
+        <div><label for="grade" class="opt">Grade</label><input type="text" id="grade" name="grade" maxlength="5" placeholder="e.g. L08"></div>
+        <div><label for="doj" class="opt">Date of joining</label><input type="date" id="doj" name="doj" min="1985-01-01" max="2026-12-31"></div>
       </div>
-      <div class="err">Fill all your details.</div></div>
+      <p class="hint" id="changed_note" style="margin:10px 0 0" hidden></p>
+      <div class="err">Fill name, gender, date of birth, department and designation.</div></div>
 
     <div class="q" data-if="idDone"><label class="t" for="mobile">Current mobile number</label>
       <input type="tel" id="mobile" name="mobile" inputmode="numeric" maxlength="10" required data-check="mobile" autocomplete="tel-national">
@@ -449,7 +439,6 @@ const SCHOOL=['Play school – UKG','Class 1–5','Class 6–10','Class 11–12'
 let EMP=null, MANUAL=false;
 const C={
   found:()=>!!EMP, manual:()=>MANUAL, idDone:()=>!!EMP||MANUAL,
-  detailsWrong:()=>!!EMP&&val('details_ok')==='No',
   wantYes:()=>C.idDone()&&val('want')==='Yes', wantNo:()=>C.idDone()&&val('want')==='No',
   noReasonOther:()=>C.wantNo()&&val('no_reason')==='Other',
   married:()=>C.wantYes()&&val('marital')==='Married',
@@ -536,7 +525,7 @@ function show(i){steps.forEach(s=>s.classList.remove('active')); const s=steps[i
   window.scrollTo({top:0});}
 
 /* ---------- validation ---------- */
-const CHECK={m4:v=>/^\d{4}$/.test(v), empid:v=>/^\d{7}$/.test(v), empidOpt:v=>v===''||/^\d{7}$/.test(v), mobile:v=>/^[6-9]\d{9}$/.test(v)};
+const CHECK={empid:v=>/^\d{7}$/.test(v), empidOpt:v=>v===''||/^\d{7}$/.test(v), mobile:v=>/^[6-9]\d{9}$/.test(v)};
 function validate(sec){let first=null;
   sec.querySelectorAll('.q').forEach(q=>{ if(q.hidden||q.closest('[hidden]')) return; let ok=true;
     const inputs=[...q.querySelectorAll('input,select')].filter(e=>!e.closest('[hidden]'));
@@ -554,11 +543,10 @@ function validate(sec){let first=null;
 /* ---------- collect ---------- */
 function collect(){const d={submitted_at:new Date().toISOString()};
   const add=(k,v)=>{d[k]=Array.isArray(v)?v.join(', '):v;};
-  add('emp_id',val('emp_id')); add('m4',val('m4'));
-  if(EMP){ add('source','HR record'); add('emp_name',EMP.name); add('designation',EMP.designation); add('department',EMP.department); add('grade',EMP.grade);
-    add('gender',EMP.gender); add('dob',EMP.dob); add('doj',EMP.doj); add('marital_hr',EMP.marital); add('details_ok',val('details_ok'));
-    if(val('details_ok')==='No') add('details_issue',val('details_issue')); }
-  else { add('source','Manual entry'); ['emp_name','department','designation','gender','dob'].forEach(k=>add(k,val(k))); }
+  add('emp_id',val('emp_id')); add('source',EMP?'HR record':'Manual entry');
+  add('emp_name',val('emp_name')); add('gender',val('gender')); add('dob',fromISO(val('dob'))); add('department',val('department'));
+  add('designation',val('designation')); add('grade',val('grade').toUpperCase()); add('doj',fromISO(val('doj')));
+  if(EMP){ add('marital_hr',EMP.marital); const ch=changes(); add('changed_fields',ch.join(', ')); }
   ['mobile','marital','want'].forEach(k=>add(k,val(k)));
   if(C.wantNo()){add('no_reason',val('no_reason')); if(C.noReasonOther()) add('no_reason_other',val('no_reason_other'));}
   if(C.wantYes()){
@@ -586,7 +574,7 @@ function collect(){const d={submitted_at:new Date().toISOString()};
   }
   add('declaration',val('declare')); return d;}
 
-const LABELS={source:'Details from',designation:'Designation',grade:'Grade',gender:'Gender',dob:'Date of birth',doj:'Date of joining',marital_hr:'Marital status (HR record)',details_ok:'HR details correct',details_issue:'Correction needed',emp_id:'Employee ID',emp_name:'Name',department:'Department',mobile:'Mobile',marital:'Marital status',want:'Wants accommodation',
+const LABELS={source:'Details from',designation:'Designation',grade:'Grade',gender:'Gender',dob:'Date of birth',doj:'Date of joining',marital_hr:'Marital status (HR record)',changed_fields:'Changed from HR record',emp_id:'Employee ID',emp_name:'Name',department:'Department',mobile:'Mobile',marital:'Marital status',want:'Wants accommodation',
  no_reason:'Reason',no_reason_other:'Reason (details)',accommodation_type:'Considered for',fam_move:'Family will stay',parents_stay:'Parents will stay',
  s_children:'Children will stay',nm_others:'Other dependents will stay',spouse_jsw:'Spouse is JSW employee',spouse_emp_id:"Spouse's Employee ID",house25:'Own house within 25 km',
  current_stay:'Staying now',movein:'Can move in from',spouse_stay:'Spouse will stay',spouse_work:'Spouse working',child_count:'Children staying',
@@ -596,7 +584,7 @@ const LABELS={source:'Details from',designation:'Designation',grade:'Grade',gend
  facilities:'Facilities',roommate:'Preferred roommate',food:'Food preference',live_in_help:'Live-in help'};
 function label(k){const m=k.match(/^child(\d)_(\w+)$/); if(m) return `Child ${m[1]} – ${({age:'age',gender:'gender',stage:'stage',school:'school near township',board:'board'})[m[2]]}`; return LABELS[k]||k;}
 function buildSummary(){const d=collect(), box=document.getElementById('summary'); box.innerHTML='';
-  Object.entries(d).forEach(([k,v])=>{ if(['submitted_at','declaration','m4'].includes(k)||v===''||v===undefined) return;
+  Object.entries(d).forEach(([k,v])=>{ if(['submitted_at','declaration'].includes(k)||v===''||v===undefined) return;
     const row=document.createElement('div'); const dt=document.createElement('dt'); const dd=document.createElement('dd');
     dt.textContent=label(k); dd.textContent=['movein'].includes(k)&&v?new Date(v).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):v;
     row.append(dt,dd); box.appendChild(row);});}
@@ -628,33 +616,40 @@ document.getElementById('dl').onclick=()=>{ if(!lastData) return;
 
 /* ---------- employee lookup ---------- */
 const DEMO={name:'Demo Employee',gender:'Male',dob:'15-06-1988',marital:'Married',department:'Mechanical',designation:'Assistant Manager',grade:'L08',doj:'01-04-2015'};
-function showEmp(){ const box=document.getElementById('emp_card'); box.innerHTML='';
-  [['Name',EMP.name],['Designation',EMP.designation],['Department',EMP.department],['Grade',EMP.grade],['Gender',EMP.gender],['Date of birth',EMP.dob],['Marital status',EMP.marital],['Date of joining',EMP.doj]]
-  .forEach(([a,b])=>{ if(!b) return; const r=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd'); dt.textContent=a; dd.textContent=b; r.append(dt,dd); box.appendChild(r); }); }
-function setMarital(m){ const map={Married:'Married',Unmarried:'Unmarried',Single:'Single'}; const v=map[m];
-  if(v&&!val('marital')) [...form.elements['marital']].forEach(e=>e.checked=e.value===v);
-  document.getElementById('marital_hint').hidden=!v; }
-async function lookup(){ const id=val('emp_id'), m4=val('m4'), msg=document.getElementById('lookmsg'), btn=document.getElementById('find');
-  const q=document.getElementById('lookup_q');
-  if(!CHECK.empid(id)||!CHECK.m4(m4)){ msg.className='lookmsg bad'; msg.textContent='Enter your 7-digit Employee ID and the last 4 digits of your mobile.'; return; }
+const toISO=d=>{const m=String(d||'').match(/^(\d{2})-(\d{2})-(\d{4})$/); return m?`${m[3]}-${m[2]}-${m[1]}`:'';};
+function fromISO(d){const m=String(d||'').match(/^(\d{4})-(\d{2})-(\d{2})$/); return m?`${m[3]}-${m[2]}-${m[1]}`:d;}
+const FIELDS=[['emp_name','name','Name'],['gender','gender','Gender'],['department','department','Department'],['designation','designation','Designation'],['grade','grade','Grade'],['doj','doj','Date of joining'],['marital','marital','Marital status']];
+function changes(){ if(!EMP) return []; return FIELDS.filter(([f,k])=>{ let v=val(f); if(f==='doj') v=fromISO(v); if(f==='grade') v=v.toUpperCase();
+  return String(v).trim().toLowerCase()!==String(EMP[k]||'').trim().toLowerCase(); }).map(x=>x[2]); }
+function fill(){ const set=(id,v)=>{ const e=form.elements[id]; if(e) e.value=v||''; };
+  const dep=form.elements['department']; if(EMP.department&&![...dep.options].some(o=>o.value===EMP.department)){ const o=document.createElement('option'); o.textContent=EMP.department; dep.insertBefore(o,dep.options[1]); }
+  set('emp_name',EMP.name); set('gender',EMP.gender); set('department',EMP.department); set('designation',EMP.designation);
+  set('grade',EMP.grade); set('doj',toISO(EMP.doj)); set('dob',toISO(EMP.dob));
+  const dob=form.elements['dob']; dob.readOnly=true;
+  [...form.elements['marital']].forEach(e=>e.checked=e.value===EMP.marital);
+  document.getElementById('marital_hint').hidden=false; document.getElementById('det_hint').hidden=false; }
+function noteChanges(){ const n=document.getElementById('changed_note'); const ch=changes();
+  n.hidden=!ch.length; n.textContent=ch.length?'Changed from HR record: '+ch.join(', ')+'. HR will update records after checking.':''; }
+async function lookup(){ const id=val('emp_id'), msg=document.getElementById('lookmsg'), btn=document.getElementById('find'), q=document.getElementById('lookup_q');
+  if(!CHECK.empid(id)){ msg.className='lookmsg bad'; msg.textContent='Enter your 7-digit Employee ID.'; return; }
   btn.disabled=true; btn.textContent='Finding…'; msg.className='lookmsg'; msg.textContent='';
   let res=null;
-  try{ if(!CONFIG.SUBMIT_URL) res=(id==='1234567'&&m4==='0000')?{ok:true,emp:DEMO}:{ok:false,error:'nomatch'};
-       else { const r=await fetch(CONFIG.SUBMIT_URL+'?action=lookup&id='+encodeURIComponent(id)+'&m4='+encodeURIComponent(m4)); res=await r.json(); } }
+  try{ if(!CONFIG.SUBMIT_URL) res=id==='1234567'?{ok:true,emp:DEMO}:{ok:false,error:'nomatch'};
+       else { const r=await fetch(CONFIG.SUBMIT_URL+'?action=lookup&id='+encodeURIComponent(id)); res=await r.json(); } }
   catch(e){ res={ok:false,error:'network'}; }
   btn.disabled=false; btn.textContent='Find my details';
-  if(res&&res.ok){ EMP=res.emp; MANUAL=false; showEmp(); setMarital(EMP.marital); q.classList.remove('bad');
-    msg.className='lookmsg good'; msg.textContent='Details found. Please check them below.'; document.getElementById('manual_link_p').hidden=true; }
+  if(res&&res.ok&&res.emp){ EMP=res.emp; MANUAL=false; fill(); q.classList.remove('bad');
+    msg.className='lookmsg good'; msg.textContent='Details found. Check them below and correct anything that has changed.'; document.getElementById('manual_link_p').hidden=true; }
   else { EMP=null; msg.className='lookmsg bad';
-    msg.textContent=res&&res.error==='locked'?'Too many wrong attempts. Try again after 30 minutes or contact HR.':
-      res&&res.error==='network'?'Could not connect. Check your internet and try again.':
-      'No match. Check your Employee ID and the last 4 digits of the mobile number registered with HR.';
+    msg.textContent=res&&res.error==='network'?'Could not connect. Check your internet and try again.':'Employee ID not found. Check the number, or fill your details manually.';
     document.getElementById('manual_link_p').hidden=false; }
-  apply(); }
+  apply(); noteChanges(); }
 document.getElementById('find').onclick=lookup;
-document.getElementById('manual_link').onclick=()=>{ MANUAL=true; EMP=null; document.getElementById('lookmsg').textContent='Fill your details below. HR will verify them.'; document.getElementById('lookmsg').className='lookmsg'; document.getElementById('lookup_q').classList.remove('bad'); apply(); };
-['emp_id','m4'].forEach(n=>form.elements[n].addEventListener('input',()=>{ if(EMP){ EMP=null; document.getElementById('lookmsg').textContent=''; } }));
-form.elements['m4'].addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); lookup(); } });
+document.getElementById('manual_link').onclick=()=>{ MANUAL=true; EMP=null; form.elements['dob'].readOnly=false; document.getElementById('det_hint').hidden=true; document.getElementById('marital_hint').hidden=true;
+  const m=document.getElementById('lookmsg'); m.textContent='Fill your details below. HR will verify them.'; m.className='lookmsg'; document.getElementById('lookup_q').classList.remove('bad'); apply(); };
+form.elements['emp_id'].addEventListener('input',()=>{ if(EMP||MANUAL){ EMP=null; MANUAL=false; document.getElementById('lookmsg').textContent=''; form.elements['dob'].readOnly=false; } });
+form.elements['emp_id'].addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); lookup(); } });
+form.addEventListener('input',()=>noteChanges()); form.addEventListener('change',()=>noteChanges());
 
 /* ---------- navigation ---------- */
 document.getElementById('next').onclick=()=>{ const s=steps[cur]; if(!validate(s)) return;
@@ -663,7 +658,7 @@ document.getElementById('next').onclick=()=>{ const s=steps[cur]; if(!validate(s
 document.getElementById('back').onclick=()=>{ const list=applicable(); const p=list.indexOf(steps[cur]); if(p>0) show(steps.indexOf(list[p-1])); };
 
 /* ---------- draft save / restore ---------- */
-function save(){ try{ const o={}; [...form.elements].forEach(e=>{ if(!e.name||e.name==='declare'||e.name==='m4') return;
+function save(){ try{ const o={}; [...form.elements].forEach(e=>{ if(!e.name||e.name==='declare') return;
   if(e.type==='radio'||e.type==='checkbox'){ if(e.checked)(o[e.name]=o[e.name]||[]).push(e.value); } else o[e.name]=e.value; });
   localStorage.setItem(DRAFT,JSON.stringify(o)); }catch(e){} }
 function restore(){ let o=null; try{o=JSON.parse(localStorage.getItem(DRAFT)||'null')}catch(e){} if(!o) return;
